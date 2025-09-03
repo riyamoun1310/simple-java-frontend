@@ -17,14 +17,21 @@ export default function SignUp({ onSignUp }) {
     setSuccess('');
     try {
       const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://simple-java-backend.onrender.com';
-      await axios.post(`${apiUrl}/api/auth/signup`, {
+      const res = await axios.post(`${apiUrl}/api/auth/signup`, {
         username,
         email,
         passwordHash: password,
       });
-      setSuccess('Registration successful! You can now sign in.');
-      setError('');
-      if (onSignUp) onSignUp(username);
+      if (res.data && res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        setSuccess('Registration successful! You are now signed in.');
+        setError('');
+        if (onSignUp) onSignUp(username);
+      } else {
+        setSuccess('Registration successful! You can now sign in.');
+        setError('');
+        if (onSignUp) onSignUp(username);
+      }
     } catch (err) {
       setError('Username or email already exists');
       setSuccess('');

@@ -14,11 +14,16 @@ export default function Login({ onLogin }) {
     setError('');
     try {
       const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://simple-java-backend.onrender.com';
-      await axios.post(`${apiUrl}/api/auth/login`, {
+      const res = await axios.post(`${apiUrl}/api/auth/login`, {
         username,
         passwordHash: password,
       });
-      if (onLogin) onLogin(username);
+      if (res.data && res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        if (onLogin) onLogin(username);
+      } else {
+        setError('Login failed: No token received');
+      }
     } catch (err) {
       setError('Invalid username or password');
     } finally {
