@@ -117,7 +117,11 @@ function App() {
             <button onClick={() => { setShowSignUp(true); setShowLogin(false); }}>Sign Up</button>
           </div>
         )}
-        {user && <div>Welcome, {user}! <button onClick={() => setUser(null)}>Logout</button></div>}
+        {user && (
+          <div>
+            Welcome, {user}! <button onClick={() => setUser(null)}>Logout</button>
+          </div>
+        )}
       </header>
 
       {showLogin && !user && <Login onLogin={u => { setUser(u); setShowLogin(false); }} />}
