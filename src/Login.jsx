@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, setError }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,14 +20,15 @@ export default function Login({ onLogin }) {
       });
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('username', username);
         if (onLogin) onLogin(username);
       } else if (res.data && res.data.message) {
-        setError(res.data.message);
+        if (setError) setError(res.data.message);
       } else {
-        setError('Login failed: No token received');
+        if (setError) setError('Login failed: No token received');
       }
     } catch (err) {
-      setError('Invalid username or password');
+    if (setError) setError(err.response?.data?.message || 'Login failed');
     } finally {
       setLoading(false);
     }

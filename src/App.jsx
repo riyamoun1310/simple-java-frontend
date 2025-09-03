@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NoteList from './NoteList.jsx';
 import NoteForm from './NoteForm.jsx';
@@ -11,10 +11,35 @@ function App() {
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // Persist user session
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+    if (token && username) {
+      setUser(username);
+    }
+  }, []);
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
+  };
+
+  const handleLogin = (username) => {
+    setUser(username);
+    localStorage.setItem('username', username);
+    setShowLogin(false);
+    setError("");
+  };
+
+  const handleSignUp = (username) => {
+    setUser(username);
+    localStorage.setItem('username', username);
+    setShowSignUp(false);
+    setError("");
   };
 
   return (
@@ -32,11 +57,12 @@ function App() {
             Welcome, <b>{user}</b>! <button onClick={handleLogout}>Logout</button>
           </div>
         )}
+        {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
         <Routes>
           <Route path="/" element={
             <>
-              {showLogin && !user && <Login onLogin={u => { setUser(u); setShowLogin(false); }} />}
-              {showSignUp && !user && <SignUp onSignUp={u => { setUser(u); setShowSignUp(false); }} />}
+              {showLogin && !user && <Login onLogin={handleLogin} setError={setError} />}
+              {showSignUp && !user && <SignUp onSignUp={handleSignUp} setError={setError} />}
               {!showLogin && !showSignUp && user && (
                 <>
                   <NoteForm owner={user} />

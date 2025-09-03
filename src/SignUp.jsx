@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 
-export default function SignUp({ onSignUp }) {
+export default function SignUp({ onSignUp, setError }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,19 +24,20 @@ export default function SignUp({ onSignUp }) {
       });
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('username', username);
         setSuccess('Registration successful! You are now signed in.');
-        setError('');
+        if (setError) setError('');
         if (onSignUp) onSignUp(username);
       } else if (res.data && res.data.message) {
-        setError(res.data.message);
+        if (setError) setError(res.data.message);
         setSuccess('');
       } else {
         setSuccess('Registration successful! You can now sign in.');
-        setError('');
+        if (setError) setError('');
         if (onSignUp) onSignUp(username);
       }
     } catch (err) {
-      setError('Username or email already exists');
+    if (setError) setError(err.response?.data?.message || 'Sign up failed');
       setSuccess('');
     } finally {
       setLoading(false);
