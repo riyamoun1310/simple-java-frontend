@@ -5,7 +5,6 @@ import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 export default function Login({ onLogin, setError }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
