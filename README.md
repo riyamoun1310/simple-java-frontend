@@ -1,12 +1,39 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# My Notes App
 
-Currently, two official plugins are available:
+This is a modern, recruiter-friendly notes app built with React (Vite) and Java Spring Boot backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- User Sign Up & Login (secure, password hashing)
+- Create, update, delete notes
+- Share notes with a unique link
+- Only owners can edit/delete their notes
+- Clean, attractive UI
 
-## Expanding the ESLint configuration
+## Setup Instructions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend
+1. Go to the `demo` folder and run the Spring Boot app:
+	- `./mvnw spring-boot:run` (Linux/Mac)
+	- `mvnw.cmd spring-boot:run` (Windows)
+2. The backend runs on `http://localhost:8080`.
+
+### Frontend
+1. Go to the `my-notes-app` folder.
+2. Install dependencies: `npm install`
+3. Start the app: `npm run dev`
+4. The frontend runs on `http://localhost:5173`.
+
+## Usage
+1. Sign up for a new account.
+2. Login with your credentials.
+3. Create, update, delete, and share notes.
+4. Share notes using the generated link.
+
+## Recruiter Highlights
+- Full-stack authentication and note sharing
+- Modern UI with Material-UI
+- Clean, documented code
+
+---
+Made with ❤️ for recruiters and demo purposes.

@@ -4,7 +4,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
-export default function SharedNote({ uuid }) {
+export default function SharedNote() {
+  const { uuid } = useParams();
   const [note, setNote] = useState(null);
 
   useEffect(() => {
