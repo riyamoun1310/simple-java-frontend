@@ -9,8 +9,7 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -31,46 +30,49 @@ function App() {
   const handleLogin = (username) => {
     setUser(username);
     localStorage.setItem('username', username);
-    setShowLogin(false);
+    setShowLogin(true);
     setError("");
   };
 
   const handleSignUp = (username) => {
     setUser(username);
     localStorage.setItem('username', username);
-    setShowSignUp(false);
+    setShowLogin(true);
     setError("");
   };
+
+  if (!user) {
+    return (
+      <div className="auth-container">
+        {showLogin ? (
+          <>
+            <Login onLogin={handleLogin} setError={setError} />
+            <p>Don't have an account? <button onClick={() => setShowLogin(false)}>Sign Up</button></p>
+          </>
+        ) : (
+          <>
+            <SignUp onSignUp={handleSignUp} setError={setError} />
+            <p>Already have an account? <button onClick={() => setShowLogin(true)}>Login</button></p>
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
       <div className="main-container">
-        <h1>My Notes App</h1>
-        {!user && (
-          <div className="auth-buttons" style={{ marginBottom: 24 }}>
-            <button onClick={() => { setShowLogin(true); setShowSignUp(false); }}>Sign In</button>
-            <button onClick={() => { setShowSignUp(true); setShowLogin(false); }}>Sign Up</button>
+        <header>
+          <h1>My Notes App</h1>
+          <div>
+            Welcome, {user}! <button onClick={handleLogout}>Logout</button>
           </div>
-        )}
-        {user && (
-          <div style={{ marginBottom: 24 }}>
-            Welcome, <b>{user}</b>! <button onClick={handleLogout}>Logout</button>
-          </div>
-        )}
-        {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
+        </header>
+        <main>
+          <NoteForm owner={user} />
+          <NoteList owner={user} />
+        </main>
         <Routes>
-          <Route path="/" element={
-            <>
-              {showLogin && !user && <Login onLogin={handleLogin} setError={setError} />}
-              {showSignUp && !user && <SignUp onSignUp={handleSignUp} setError={setError} />}
-              {!showLogin && !showSignUp && user && (
-                <>
-                  <NoteForm owner={user} />
-                  <NoteList owner={user} />
-                </>
-              )}
-            </>
-          } />
           <Route path="/share/:uuid" element={<SharedNote />} />
         </Routes>
       </div>
