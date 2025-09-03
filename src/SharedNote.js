@@ -9,7 +9,7 @@ export default function SharedNote() {
   const [note, setNote] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/notes/share/${uuid}`)
+  axios.get(`https://simple-java-backend.onrender.com/api/notes/share/${uuid}`)
       .then(res => setNote(res.data))
       .catch(err => setNote(null));
   }, [uuid]);

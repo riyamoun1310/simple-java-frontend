@@ -7,7 +7,7 @@ export default function NoteList() {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/notes')
+  axios.get('https://simple-java-backend.onrender.com/api/notes')
       .then(res => setNotes(res.data))
       .catch(err => console.error(err));
   }, []);

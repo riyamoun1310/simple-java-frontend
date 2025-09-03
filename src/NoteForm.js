@@ -9,7 +9,7 @@ export default function NoteForm({ onNoteCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post('http://localhost:8080/api/notes', { title, content });
+  const res = await axios.post('https://simple-java-backend.onrender.com/api/notes', { title, content });
     if (onNoteCreated) onNoteCreated(res.data);
     setTitle('');
     setContent('');
