@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, CardContent, Typography, Box } from '@mui/material';
@@ -8,10 +9,16 @@ export default function SharedNote({ uuid }) {
   useEffect(() => {
     axios.get(`http://localhost:8080/api/notes/share/${uuid}`)
       .then(res => setNote(res.data))
-      .catch(err => setNote(null));
+      .catch(() => setNote(null));
   }, [uuid]);
 
-  if (!note) return <Box sx={{ mt: 6, textAlign: 'center' }}><Typography variant="h6">Note not found or loading...</Typography></Box>;
+  if (!note) {
+    return (
+      <Box sx={{ mt: 6, textAlign: 'center' }}>
+        <Typography variant="h6">Note not found or loading...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ mt: 6, display: 'flex', justifyContent: 'center' }}>

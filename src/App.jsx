@@ -1,144 +1,39 @@
-import React, { useState } from 'react';
-import './App.css';
-import NoteList from './NoteList.jsx';
-import NoteForm from './NoteForm.jsx';
-import SharedNote from './SharedNote.jsx';
-import Login from './Login.jsx';
-import SignUp from './SignUp.jsx';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 
-function App() {
-  const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showShared, setShowShared] = useState(false);
-  const [sharedUuid, setSharedUuid] = useState('');
+export default function SharedNote({ uuid }) {
+  const [note, setNote] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  return (
-    <div className="main-container">
-      <header>
-        <h1>My Notes App</h1>
-        {!user && (
-          <div className="auth-buttons">
-            <button onClick={() => { setShowLogin(true); setShowSignUp(false); }}>Login</button>
-        {user && <div>Welcome, {user}! <button onClick={() => setUser(null)}>Logout</button></div>}
-      </header>
+  useEffect(() => {
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    axios.get(`${apiUrl}/api/notes/share/${uuid}`)
+      .then(res => {
+        setNote(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [uuid]);
 
-      {showLogin && !user && <Login onLogin={u => { setUser(u); setShowLogin(false); }} />}
-  {showSignUp && !user && <SignUp onSignUp={u => { setUser(u); setShowSignUp(false); }} />}
-
-  {!showLogin && !showSignUp && user && (
-        <>
-          <NoteForm onNoteCreated={() => {}} owner={user} />
-          <NoteList owner={user} onShare={uuid => { setSharedUuid(uuid); setShowShared(true); }} />
-        </>
-      )}
-
-      {showShared && sharedUuid && (
-        <SharedNote uuid={sharedUuid} />
-      )}
-    </div>
-  );
-}
-
-export default App;
-import React, { useState } from 'react';
-import './App.css';
-import NoteList from './NoteList.jsx';
-import NoteForm from './NoteForm.jsx';
-import SharedNote from './SharedNote.jsx';
-import Login from './Login.jsx';
-import SignUp from './SignUp.jsx';
-
-function App() {
-  const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showShared, setShowShared] = useState(false);
-  const [sharedUuid, setSharedUuid] = useState('');
+  if (loading) return <Box sx={{ mt: 6, textAlign: 'center' }}><Typography variant="h6">Loading...</Typography></Box>;
+  if (error || !note) return <Box sx={{ mt: 6, textAlign: 'center' }}><Typography variant="h6">404: Note Not Found</Typography></Box>;
 
   return (
-    <div className="main-container">
-      <header>
-        <h1>My Notes App</h1>
-        {!user && (
-          <div className="auth-buttons">
-            <button onClick={() => { setShowLogin(true); setShowSignUp(false); }}>Login</button>
-            <button onClick={() => { setShowSignUp(true); setShowLogin(false); }}>Sign Up</button>
-          </div>
-        )}
-        {user && (
-          <div>
-            Welcome, {user}! <button onClick={() => setUser(null)}>Logout</button>
-          </div>
-        )}
-      </header>
-
-      {showLogin && !user && (<Login onLogin={u => { setUser(u); setShowLogin(false); }} />)}
-      {showSignUp && !user && (<SignUp onSignUp={u => { setUser(u); setShowSignUp(false); }} />)}
-
-      {!showLogin && !showSignUp && user && (
-        <React.Fragment>
-          <NoteForm onNoteCreated={() => {}} owner={user} />
-          <NoteList owner={user} onShare={uuid => { setSharedUuid(uuid); setShowShared(true); }} />
-        </React.Fragment>
-      )}
-
-      {showShared && sharedUuid && (
-        <SharedNote uuid={sharedUuid} />
-      )}
-    </div>
+    // ... baaki ka code same hai
+    <Box sx={{ mt: 6, display: 'flex', justifyContent: 'center' }}>
+      <Card sx={{ minWidth: 350, boxShadow: 4, borderRadius: 3, bgcolor: '#e3f2fd' }}>
+        <CardContent>
+          <Typography variant="h5" color="primary" gutterBottom>{note.title}</Typography>
+          <Typography variant="body1">{note.content}</Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
-
-export default App;
-
-import React, { useState } from 'react';
-import './App.css';
-import NoteList from './NoteList.jsx';
-import NoteForm from './NoteForm.jsx';
-import SharedNote from './SharedNote.jsx';
-import Login from './Login.jsx';
-import SignUp from './SignUp.jsx';
-
-function App() {
-  const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showShared, setShowShared] = useState(false);
-  const [sharedUuid, setSharedUuid] = useState('');
-
-  return (
-    <div className="main-container">
-      <header>
-        <h1>My Notes App</h1>
-        {!user && (
-          <div className="auth-buttons">
-            <button onClick={() => { setShowLogin(true); setShowSignUp(false); }}>Login</button>
-            <button onClick={() => { setShowSignUp(true); setShowLogin(false); }}>Sign Up</button>
-          </div>
-        )}
-        {user && (
-          <div>
-            Welcome, {user}! <button onClick={() => setUser(null)}>Logout</button>
-          </div>
-        )}
-      </header>
-
-      {showLogin && !user && <Login onLogin={u => { setUser(u); setShowLogin(false); }} />}
-      {showSignUp && !user && <SignUp onSignUp={u => { setUser(u); setShowSignUp(false); }} />}
-
-      {!showLogin && !showSignUp && user && (
-        <>
-          <NoteForm onNoteCreated={() => {}} owner={user} />
-          <NoteList owner={user} onShare={uuid => { setSharedUuid(uuid); setShowShared(true); }} />
-        </>
-      )}
-
-      {showShared && sharedUuid && (
-        <SharedNote uuid={sharedUuid} />
-      )}
-    </div>
-  );
-}
-
-export default App;
