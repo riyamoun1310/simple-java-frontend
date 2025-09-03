@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import axios from 'axios';
 import { Card, CardContent, Typography, Box, Link, Grid } from '@mui/material';
 
@@ -7,7 +6,7 @@ export default function NoteList() {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-  axios.get('https://simple-java-backend.onrender.com/api/notes')
+    axios.get('https://simple-java-backend.onrender.com/api/notes')
       .then(res => setNotes(res.data))
       .catch(err => console.error(err));
   }, []);
