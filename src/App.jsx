@@ -9,11 +9,11 @@ function App() {
   return (
     <BrowserRouter>
       <div className="main-container">
+        <h1>My Notes App</h1>
         <Routes>
           {/* Home Page: NoteForm + NoteList */}
           <Route path="/" element={
             <>
-              <h1>My Notes App</h1>
               <NoteForm />
               <NoteList />
             </>
