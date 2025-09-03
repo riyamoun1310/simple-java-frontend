@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import NoteList from './NoteList';
-import NoteForm from './NoteForm';
-import SharedNote from './SharedNote';
+import NoteList from './NoteList.jsx';
+import NoteForm from './NoteForm.jsx';
+import SharedNote from './SharedNote.jsx';
 
 function App() {
   const [notes, setNotes] = useState([]);
