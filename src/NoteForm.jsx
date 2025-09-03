@@ -9,10 +9,19 @@ export default function NoteForm({ onNoteCreated, owner }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const apiUrl = import.meta.env.VITE_API_BASE_URL || "https://simple-java-backend.onrender.com";
-    const res = await axios.post(`${apiUrl}/api/notes?ownerId=${owner}`, { title, content });
-    if (onNoteCreated) onNoteCreated(res.data);
-    setTitle("");
-    setContent("");
+    const token = localStorage.getItem('token');
+    try {
+      const res = await axios.post(`${apiUrl}/api/notes?ownerId=${owner}`, { title, content }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (onNoteCreated) onNoteCreated(res.data);
+      setTitle("");
+      setContent("");
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        alert('Error: ' + err.response.data.message);
+      }
+    }
   };
 
   return (

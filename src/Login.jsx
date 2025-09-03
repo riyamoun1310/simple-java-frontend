@@ -21,6 +21,8 @@ export default function Login({ onLogin }) {
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
         if (onLogin) onLogin(username);
+      } else if (res.data && res.data.message) {
+        setError(res.data.message);
       } else {
         setError('Login failed: No token received');
       }

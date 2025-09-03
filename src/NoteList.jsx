@@ -6,12 +6,20 @@ export default function NoteList({ owner, onShare }) {
   const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/notes')
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://simple-java-backend.onrender.com';
+    const token = localStorage.getItem('token');
+    axios.get(`${apiUrl}/api/notes`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(res => {
-        // Only show notes for the logged-in user
         setNotes(res.data.filter(n => n.owner && n.owner.username === owner));
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        if (err.response && err.response.data && err.response.data.message) {
+          alert('Error: ' + err.response.data.message);
+        }
+      });
   }, [owner]);
 
   const handleShare = (uuid) => {
@@ -21,7 +29,11 @@ export default function NoteList({ owner, onShare }) {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/api/notes/${id}?ownerId=${owner}`);
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://simple-java-backend.onrender.com';
+    const token = localStorage.getItem('token');
+    await axios.delete(`${apiUrl}/api/notes/${id}?ownerId=${owner}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     setNotes(notes.filter(n => n.id !== id));
   };
 

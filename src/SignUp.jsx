@@ -27,6 +27,9 @@ export default function SignUp({ onSignUp }) {
         setSuccess('Registration successful! You are now signed in.');
         setError('');
         if (onSignUp) onSignUp(username);
+      } else if (res.data && res.data.message) {
+        setError(res.data.message);
+        setSuccess('');
       } else {
         setSuccess('Registration successful! You can now sign in.');
         setError('');
