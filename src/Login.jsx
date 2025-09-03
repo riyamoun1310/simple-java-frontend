@@ -17,17 +17,20 @@ export default function Login({ onLogin, setError }) {
         username,
         passwordHash: password,
       });
+      console.log('Login response:', res.data);
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('username', username);
         if (onLogin) onLogin(username);
+        if (setError) setError('');
       } else if (res.data && res.data.message) {
         if (setError) setError(res.data.message);
       } else {
         if (setError) setError('Login failed: No token received');
       }
     } catch (err) {
-    if (setError) setError(err.response?.data?.message || 'Login failed');
+  if (setError) setError(err.response?.data?.message || 'Login failed');
+  console.error('Login error:', err);
     } finally {
       setLoading(false);
     }

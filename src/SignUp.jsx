@@ -21,6 +21,7 @@ export default function SignUp({ onSignUp, setError }) {
         email,
         passwordHash: password,
       });
+      console.log('SignUp response:', res.data);
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('username', username);
@@ -36,7 +37,8 @@ export default function SignUp({ onSignUp, setError }) {
         if (onSignUp) onSignUp(username);
       }
     } catch (err) {
-    if (setError) setError(err.response?.data?.message || 'Sign up failed');
+  if (setError) setError(err.response?.data?.message || 'Sign up failed');
+  console.error('SignUp error:', err);
       setSuccess('');
     } finally {
       setLoading(false);
